@@ -1,19 +1,16 @@
-//não conseguimos deletar com filter
-//da onde esta vindo tamanho da fonte
-//a barra de scroll esta em cima das tarefas, não seria melhor jogar ela mais para direita, ou é melhor assim mexso
-//pq na linha 73 colocou h-[30vh]
-//qual utilidade do overflow-hidden , e do justify between na linha 58. Utilidade do flex-1 na linha 59
-//o tempo de creação zera quando atualizamos a pagina
 
 import { useEffect, useState } from "react"
 import './index.css'
 import Tarefa from "./components/Tarefa"
 import { X } from "lucide-react"
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
   const [tarefas, setTarefas] = useState(JSON.parse(localStorage.getItem("tarefas")))        //estado inicial , pegando as tarefas salvas no localStorage. O JSON.parse , transforma as tarefas em string novamente , pois na linha 20 tivemos que transformalas em JSON para salvalas no localStorage
   const [tarefa, setTarefa] = useState("")
   const [erro, setErro] = useState(null)
+
 
   useEffect(() => {                                                                              //salvando as tarefas no localStorage
     if (tarefas) {                                                                                 //se receber tarefas , ira transformalas em JSON e salvalas no localStorage
@@ -33,25 +30,35 @@ function App() {
 
     setTarefas([...tarefas, { texto: tarefa, createdAt: new Date(), done: false }])
     setTarefa("")                                                                             //limpando o input, para receber a próxima tarefa                           
-
+    toast(`Tarefa ${tarefa} adicionada`)
   }
 
   const deletarTarefa = (id) => {
     const array = [...tarefas]
     array.splice(id, 1)
     setTarefas(array)
+    toast(`Tarefa ${array[id].texto} deletada`)
   }
 
   const alternarEstado = (id) => {
     const array = [...tarefas]
     array[id].done = !array[id].done
+    console.log(array[id])
     setTarefas(array)
+    if ( array[id].done  == false) {
+      toast.error(`Tarefa ${array[id].texto} voltou a ser pendente`)
+    }
+    if ( array[id].done  == true) {
+      toast.success(`Tarefa ${array[id].texto} foi concluida`)
+    }
+
   }
 
   const limparTarefas = () => {
     if (window.confirm("Tem certeza que deseja apagar todas as tarefas?")) {                                                                  //msg de alerta antes de deletar
       setTarefas([])                                                                                                                          //deletando todas as tarefas
     }
+    toast(`Lista de tarefas foi limpa`)
   }
 
   return (
@@ -116,7 +123,11 @@ function App() {
           </div>
         }
 
+          <ToastContainer />
+    
+
       </div>
+
     </>
   )
 }
