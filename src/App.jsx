@@ -1,4 +1,5 @@
 
+
 import { useEffect, useState } from "react"
 import './index.css'
 import Tarefa from "./components/Tarefa"
@@ -35,9 +36,10 @@ function App() {
 
   const deletarTarefa = (id) => {
     const array = [...tarefas]
+    toast(`Tarefa ${array[id].texto} deletada`)
     array.splice(id, 1)
     setTarefas(array)
-    toast(`Tarefa ${array[id].texto} deletada`)
+    
   }
 
   const alternarEstado = (id) => {
@@ -68,7 +70,7 @@ function App() {
 
           {tarefas.length > 0 ? (<h1 className="text-3xl">Lista De Tarefas</h1>) : (<h1 className="text-2xl">Lista de tarefas vazia.</h1>)}
 
-          <ul className="flex flex-col gap-2  overflow-auto w-full max-w-[500px]">                                                              {/*responsividade da largura do input . E também p scroll*/}
+          <ul className="flex flex-col gap-2  overflow-auto w-full max-w-[500px] px-4">                                                              {/*responsividade da largura do input . E também p scroll*/}
             {tarefas.map((tarefa, id) =>
               <Tarefa
                 key={id}
@@ -96,7 +98,7 @@ function App() {
             }
             }
           />
-          <div className="flex flex-row w-full justify-end items-center sm:justify-center gap-2 ">
+          <div className="flex flex-row w-full justify-end items-center gap-2 sm:justify-center  ">
 
             <button
               className=
